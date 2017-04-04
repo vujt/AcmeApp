@@ -15,7 +15,7 @@ namespace Acme.Biz
     {
         public const double InchesPerMeter = 39.37;
         public readonly decimal MinimumPrice;
-
+        
         #region Constructors
         public Product()
         {            
@@ -52,7 +52,9 @@ namespace Acme.Biz
             get { return availabilityDate; }
             set { availabilityDate = value; }
         }
-        
+
+        public decimal Cost { get; set; }
+
         private string productName;
 
         public string ProductName
@@ -118,6 +120,14 @@ namespace Acme.Biz
         public string ProductCode => this.Category + "-" + this.SequenceNumber;
         #endregion
 
+        /// <summary>
+        /// Calculate the suggested retail price
+        /// </summary>
+        /// <param name="markupPercent">Percent used to mark up the cost</param>
+        /// <returns></returns>
+        public decimal CalculateSuggestedPrice(decimal markupPercent) =>
+            this.Cost + (this.Cost * markupPercent / 100);
+        
         public string SayHello()
         {
             //var vendor = new Vendor();
@@ -134,6 +144,11 @@ namespace Acme.Biz
                 " Available on: "  +
                 AvailabilityDate?.ToShortDateString()
                 ;
+        }
+
+        public override string ToString()
+        {
+            return this.ProductName + " (" + this.ProductId + ")";
         }
     }
 }

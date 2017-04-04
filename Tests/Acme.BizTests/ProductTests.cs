@@ -28,7 +28,7 @@ namespace Acme.Biz.Tests
             var actual = currentProduct.SayHello();
 
             // Assert
-            Assert.AreEqual(expected, actual) ;
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod()]
@@ -36,7 +36,7 @@ namespace Acme.Biz.Tests
         {
             // Arrange
             var currentProduct = new Product(1, "Saw", "15-inch steel blade hand saw");
-           
+
             var expected = "Hello Saw (1): 15-inch steel blade hand saw" +
                 " Available on: ";
 
@@ -109,7 +109,7 @@ namespace Acme.Biz.Tests
         public void ProductName_Format()
         {
             //Arrange
-           var currentProduct = new Product();
+            var currentProduct = new Product();
             currentProduct.ProductName = " Steel Hammer ";
             var expected = "Steel Hammer";
 
@@ -178,7 +178,7 @@ namespace Acme.Biz.Tests
         public void Category_DefaultValue()
         {
             //Arrange
-            var currentProduct = new Product();            
+            var currentProduct = new Product();
             var expected = "Tools";
 
             // Act
@@ -219,18 +219,33 @@ namespace Acme.Biz.Tests
             // Assert
             Assert.AreEqual(expected, actual);
         }
-                
+
         [TestMethod()]
         public void Product_DefaultValue()
         {
             //Arrange
             var currentProduct = new Product();
-            
+
             var expected = "Tools-1";
 
             // Act
             var actual = currentProduct.ProductCode;
 
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void CalculateSuggestedPriceTest()
+        {
+            // Arrange 
+            var currentProduct = new Product(1, "Saw", "");
+            currentProduct.Cost = 50m;
+            var expected = 55m;
+
+            // Act
+            var actual = currentProduct.CalculateSuggestedPrice(10m);
+            
             // Assert
             Assert.AreEqual(expected, actual);
         }
