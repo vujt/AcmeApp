@@ -64,7 +64,8 @@ namespace Acme.Biz.Tests
             var vendor = new Vendor();
             var product = new Product(1, "Saw", "");
             var expected = new OperationResult(true,
-                "Order from Acme, Inc\r\nProduct: Tools-1\r\nQuantity: 12");
+                "Order from Acme, Inc\r\nProduct: Tools-0001\r\nQuantity: 12" +
+                "\r\nInstructions: standard delivery");
 
             // Act
             var actual = vendor.PlaceOrder(product, 12);
@@ -81,8 +82,9 @@ namespace Acme.Biz.Tests
             var vendor = new Vendor();
             var product = new Product(1, "Saw", "");
             var expected = new OperationResult(true,
-                "Order from Acme, Inc\r\nProduct: Tools-1\r\nQuantity: 12" +
-                "\r\nDeliver By: 10/25/2019");
+                "Order from Acme, Inc\r\nProduct: Tools-0001\r\nQuantity: 12" +
+                "\r\nDeliver By: 10/25/2019" +
+                "\r\nInstructions: standard delivery");
 
             // Act
             var actual = vendor.PlaceOrder(product, 12,
@@ -113,14 +115,64 @@ namespace Acme.Biz.Tests
             // Arrange
             var vendor = new Vendor();
             var product = new Product(1, "Saw", "");
-            var expected = new OperationResult(true,"Test With Address");
+            var expected = new OperationResult(true, "Test With Address");
 
             // Act
-            var actual = vendor.PlaceOrder(product, 12,true,false);
+            var actual = vendor.PlaceOrder(product, 12,
+                Vendor.IncludeAddress.Yes,
+                Vendor.SendCopy.No);
 
             // Assert
             Assert.AreEqual(expected.Success, actual.Success);
             Assert.AreEqual(expected.Message, actual.Message);
+        }
+
+        [TestMethod()]
+        public void PlaceOrderTest_NoDeliveryDate()
+        {
+            // Arrange
+            var vendor = new Vendor();
+            var product = new Product(1, "Saw", "");
+            var expected = new OperationResult(true,
+                "Order from Acme, Inc\r\nProduct: Tools-0001\r\nQuantity: 12" +
+                "\r\nInstructions: standard delivery to suite 1");
+
+            // Act
+            var actual = vendor.PlaceOrder(product, 12, instructions: "standard delivery to suite 1");
+
+            // Assert
+            Assert.AreEqual(expected.Success, actual.Success);
+            Assert.AreEqual(expected.Message, actual.Message);
+        }
+
+        [TestMethod()]
+        public void ToStringTest()
+        {
+            // Arrange
+            var vendor = new Vendor();
+            vendor.VendorId = 1;
+            vendor.CompanyName = "ABC Corp";
+            var expected = "Vendor: ABC Corp";
+
+            // Act
+            var actual = vendor.ToString();
+
+            // Assert            
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void PrepareDirectionsTest()
+        {
+            // Arrange
+            var vendor = new Vendor();            
+            var expected = @"Insert \r\n to define a new line";
+
+            // Act
+            var actual = vendor.PrepareDirections();
+
+            // Assert            
+            Assert.AreEqual(expected, actual);
         }
     }
 }

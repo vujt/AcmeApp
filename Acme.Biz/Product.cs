@@ -117,7 +117,12 @@ namespace Acme.Biz
 
         public int SequenceNumber { get; set; } = 1;
 
-        public string ProductCode => this.Category + "-" + this.SequenceNumber;
+        //public string ProductCode => String.Format("{0}-{1:0000}",
+        //                                this.Category,
+        //                                this.SequenceNumber);
+
+        public string ProductCode => $"{this.Category}-{this.SequenceNumber:0000}";
+
         #endregion
 
         /// <summary>
